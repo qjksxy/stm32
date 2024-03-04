@@ -319,3 +319,8 @@ void OLED_Init(void)
 		
 	OLED_Clear();				//OLED清屏
 }
+
+// 在最后一行打印数字，要求数字在 0~99 之间
+void OLED_Show_Int_Info(int i) {
+    OLED_ShowNum(4, 15, i, 2);
+}
