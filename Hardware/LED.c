@@ -15,18 +15,19 @@ void LED_Init_01(void) {
     GPIO_SetBits(GPIOA, GPIO_Pin_1);
 }
 
+// A0灯亮
 void LED_Green_On(void) {
     GPIO_ResetBits(GPIOA, GPIO_Pin_0);
 }
-
+// A1灯亮
 void LED_Red_On(void) {
     GPIO_ResetBits(GPIOA, GPIO_Pin_1);
 }
-
+// A0灯灭
 void LED_Green_Off(void) {
     GPIO_SetBits(GPIOA, GPIO_Pin_0);
 }
-
+// A1灯灭
 void LED_Red_Off(void) {
     GPIO_SetBits(GPIOA, GPIO_Pin_1);
 }
