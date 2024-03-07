@@ -1,22 +1,39 @@
 #include "stm32f10x.h"
 #include "OLED_Font.h"
 
+#define OLED_RCC_APB2Perip RCC_APB2Periph_GPIOB
+#define OLED_SCL_PIN GPIO_Pin_8
+#define OLED_SDA_PIN GPIO_Pin_9
+#define OLED_GPIOx GPIOB
+
+
+
+
 /*引脚配置*/
-#define OLED_W_SCL(x)		GPIO_WriteBit(GPIOB, GPIO_Pin_8, (BitAction)(x))
-#define OLED_W_SDA(x)		GPIO_WriteBit(GPIOB, GPIO_Pin_9, (BitAction)(x))
+void OLED_W_SCL(uint8_t x) {
+    GPIO_WriteBit(OLED_GPIOx, OLED_SCL_PIN, (BitAction)(x));
+}
+
+void OLED_W_SDA(uint8_t x) {
+    GPIO_WriteBit(OLED_GPIOx, OLED_SDA_PIN, (BitAction)(x));
+}
+
+/*引脚配置*/
+//#define OLED_W_SCL(x)		GPIO_WriteBit(GPIOB, GPIO_Pin_8, (BitAction)(x))
+//#define OLED_W_SDA(x)		GPIO_WriteBit(GPIOB, GPIO_Pin_9, (BitAction)(x))
 
 /*引脚初始化*/
 void OLED_I2C_Init(void)
 {
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    RCC_APB2PeriphClockCmd(OLED_RCC_APB2Perip, ENABLE);
 	
 	GPIO_InitTypeDef GPIO_InitStructure;
  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
- 	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
- 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = OLED_SCL_PIN;
+ 	GPIO_Init(OLED_GPIOx, &GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_Pin = OLED_SDA_PIN;
+ 	GPIO_Init(OLED_GPIOx, &GPIO_InitStructure);
 	
 	OLED_W_SCL(1);
 	OLED_W_SDA(1);
@@ -133,6 +150,10 @@ void OLED_Clear(void)
   */
 void OLED_ShowChar(uint8_t Line, uint8_t Column, char Char)
 {      	
+    // 边界检查
+    if(Line < 1 || Line > 4 || Column < 1 || Column > 16) {
+        return;
+    }
 	uint8_t i;
 	OLED_SetCursor((Line - 1) * 2, (Column - 1) * 8);		//设置光标位置在上半部分
 	for (i = 0; i < 8; i++)
@@ -323,4 +344,12 @@ void OLED_Init(void)
 // 在最后一行打印数字，要求数字在 0~99 之间
 void OLED_Show_Int_Info(int i) {
     OLED_ShowNum(4, 15, i, 2);
+}
+
+void OLED_Show_Title(void) {
+    OLED_ShowChar(1, 1, '~' + 5);
+    OLED_ShowChar(1, 2, '~' + 6);
+    OLED_ShowString(1, 6, "Furina");
+    OLED_ShowChar(1, 15, '~' + 5);
+    OLED_ShowChar(1, 16, '~' + 6);
 }
