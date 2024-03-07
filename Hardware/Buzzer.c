@@ -1,27 +1,31 @@
 #include "stm32f10x.h"                  // Device header
 #include "Delay.h"
 
+#define BUZZER_RCC_APB2Periph RCC_APB2Periph_GPIOB
+#define BUZZER_GPIO_PIN GPIO_Pin_12
+#define BUZZER_GPIOx GPIOB
+
 void Buzzer_Init(void) {
     // 时钟使能
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    RCC_APB2PeriphClockCmd(BUZZER_RCC_APB2Periph, ENABLE);
     // 定义结构体，设置端口输入输出模式
     GPIO_InitTypeDef GPIO_InitStructure;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+    GPIO_InitStructure.GPIO_Pin = BUZZER_GPIO_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_Init(BUZZER_GPIOx, &GPIO_InitStructure);
     
-    GPIO_SetBits(GPIOB, GPIO_Pin_12);
+    GPIO_SetBits(BUZZER_GPIOx, BUZZER_GPIO_PIN);
 }
 
 // 蜂鸣器响
 void Buzzer_On(void) {
-    GPIO_ResetBits(GPIOB, GPIO_Pin_12);
+    GPIO_ResetBits(BUZZER_GPIOx, BUZZER_GPIO_PIN);
 }
 
 // 蜂鸣器关
 void Buzzer_Off(void) {
-    GPIO_SetBits(GPIOB, GPIO_Pin_12);
+    GPIO_SetBits(BUZZER_GPIOx, BUZZER_GPIO_PIN);
 }
 
 // 蜂鸣器指定毫秒时间响
