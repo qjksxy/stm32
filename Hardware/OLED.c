@@ -6,9 +6,6 @@
 #define OLED_SDA_PIN GPIO_Pin_9
 #define OLED_GPIOx GPIOB
 
-
-
-
 /*引脚配置*/
 void OLED_W_SCL(uint8_t x) {
     GPIO_WriteBit(OLED_GPIOx, OLED_SCL_PIN, (BitAction)(x));
