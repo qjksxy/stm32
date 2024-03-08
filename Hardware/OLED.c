@@ -181,6 +181,24 @@ void OLED_ShowString(uint8_t Line, uint8_t Column, char *String)
 }
 
 /**
+  * @brief  OLED 显示字符串，自动折行
+  * @param  Line 起始行位置，范围：1~4
+  * @param  Column 起始列位置，范围：1~16
+  * @param  String 要显示的字符串，范围：ASCII可见字符
+  */
+void OLED_ShowStringn(uint8_t Line, uint8_t Column, char *String) {
+    uint8_t i;
+	for (i = 0; String[i] != '\0'; i++)
+	{
+		OLED_ShowChar(Line, Column + i, String[i]);
+        if(Column + i + 1 > 16) {
+            OLED_ShowStringn(Line + 1, 1, &String[i+1]);
+            break;
+        }
+	}
+}
+
+/**
   * @brief  OLED次方函数
   * @retval 返回值等于X的Y次方
   */
@@ -350,3 +368,5 @@ void OLED_Show_Title(void) {
     OLED_ShowChar(1, 15, '~' + 5);
     OLED_ShowChar(1, 16, '~' + 6);
 }
+
+
