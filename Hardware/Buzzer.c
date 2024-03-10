@@ -1,9 +1,6 @@
 #include "stm32f10x.h"
 #include "Delay.h"
-
-#define BUZZER_RCC_APB2Periph    RCC_APB2Periph_GPIOB
-#define BUZZER_GPIO_PIN          GPIO_Pin_12
-#define BUZZER_GPIOx             GPIOB
+#include "Buzzer.h"
 
 void Buzzer_Init(void) {
     // 时钟使能
